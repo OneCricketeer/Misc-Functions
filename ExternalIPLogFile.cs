@@ -10,27 +10,25 @@ namespace ConsoleApplications
     internal class ExternalIPLogFile
 	{
  
-		 #region LogFile
+	#region LogFile
         public void fileWriter()
         {
             StreamWriter log;
             String year = DateTime.Now.Year.ToString();
 
             // See if the log file for the year exists
-            if (!File.Exists(year + "_access.log"))
+            String fileName = year + "_access.log";
+            if (!File.Exists(fileName))
             {
-                log = new StreamWriter(year + "_access.log");
+                log = new StreamWriter(fileName);
                 log.WriteLine("[" + year + " LOG]");
             }
             else
             {
-                log = File.AppendText(year + "_access.log");
+                log = File.AppendText(fileName);
             }
 
-            // Write to the file:
             log.WriteLine(DateTime.Now);
-
-            // Close the stream:
             log.Close();
         }
 
@@ -41,15 +39,17 @@ namespace ConsoleApplications
             string time;
             DateTime lastAccess = DateTime.Now;
 
-            if (File.Exists(year + "_access.log"))
+	    String fileName = year + "_access.log";
+            if (File.Exists(fileName))
             {
-                StreamReader file = new StreamReader(year + "_access.log");
+                StreamReader file = new StreamReader(fileName);
 
                 // Reads the last time the IP Address was attempted to be received
                 while ((time = file.ReadLine()) != null)
                 {
-                    if (time.EndsWith("AM") || time.EndsWith("PM"))
-                        lastAccess = Convert.ToDateTime(time);
+                    if (time.EndsWith("AM") || time.EndsWith("PM")) {
+                    	lastAccess = Convert.ToDateTime(time);
+                    }
                 }
                 file.Close();
             }
